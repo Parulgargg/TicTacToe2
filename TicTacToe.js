@@ -1,5 +1,8 @@
 let boxes=document.querySelectorAll('.box');
-let resetBtn=document.querySelectorAll('#reset-btn');
+let resetBtn=document.querySelector('#reset-btn');
+let newGameBtn = document.querySelector("#new-btn");
+let msgContainer = document.querySelector(".msg-container");
+let msg = document.querySelector("#msg");
 
 let turnO = true;
 
@@ -13,16 +16,21 @@ const winPatterns = [
     [3,4,5],
     [6,7,8]
 ];
+const resetGame = () =>{
+    turnO = true;
+    enableBoxes();
+    msgContainer.classList.add("hide");
+
+}
 
 boxes.forEach((box)=> {
     box.addEventListener("click",()=>{
-        console.log("box was clicked");
         if(turnO){
             box.innerText = "O";
             turnO = false;
         }else{
             box.innerText = "X";
-            turnO = "true";
+            turnO = true ;
         }
         box.disabled = true;
 
@@ -30,38 +38,39 @@ boxes.forEach((box)=> {
     });
 });
 
-// const checkWinner = ()=>{
-//     for(let pattern of winPatterns){
+const disableBoxes = ()=>{
+    for(let box of boxes){
+        box.disabled = true;
+    }
+}
 
-//     }
-// }
+const enableBoxes = ()=>{
+    for(let box of boxes){
+        box.disabled = false;
+        box.innerText = "";
+    }
+}
 
-//To check turns
-// let counter = 0;
-// function checkTurn(){
-// if(counter%2 === 0){
-//     counter++;
-//     return true;
-// }else{
-//     counter++;
-//     return false
-// }
-// }
+const showWinner = (winner) =>{
+    msg.innerText = `Congratulations, Winner is ${winner}`;
+    msgContainer.classList.remove("hide");
+    disableBoxes();
+}
 
-// //To check if  box is empty
-// function checkEmpty(item){
-// if(item.innerText.trim().length === 0){
-//     return true;
-// }else
-// return false;
-// }
+const checkWinner = ()=>{
+    for(let pattern of winPatterns){
+        
+    let pos1Val = boxes[pattern[0]].innerText;
+    let pos2Val = boxes[pattern[1]].innerText;
+    let pos3Val = boxes[pattern[2]].innerText;
 
-// item1.addEventListener("click", checkEmpty(item1) ){
-//     if(checkTurn)//(bool to check turn)
-//         {
-//             item1.innerText = "O";
+    if(pos1Val != "" && pos2Val != "" && pos3Val != "" ){
+        if(pos1Val === pos2Val && pos2Val === pos3Val ){ 
+            showWinner(pos1Val);
+        }
+    }
+}
+};
 
-//         }
-//         else
-//         item1.innertext = "X";
-// }
+newGameBtn.addEventListener("click", resetGame);
+resetBtn.addEventListener("click", resetGame);
